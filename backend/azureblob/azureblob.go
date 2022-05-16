@@ -26,6 +26,7 @@ import (
 	"github.com/Azure/azure-storage-blob-go/azblob"
 	"github.com/Azure/go-autorest/autorest/adal"
 	"github.com/rclone/rclone/fs"
+	"github.com/rclone/rclone/fs/chunksize"
 	"github.com/rclone/rclone/fs/config"
 	"github.com/rclone/rclone/fs/config/configmap"
 	"github.com/rclone/rclone/fs/config/configstruct"
@@ -43,8 +44,9 @@ import (
 const (
 	minSleep              = 10 * time.Millisecond
 	maxSleep              = 10 * time.Second
-	decayConstant         = 1    // bigger for slower decay, exponential
-	maxListChunkSize      = 5000 // number of items to read at once
+	decayConstant         = 1     // bigger for slower decay, exponential
+	maxListChunkSize      = 5000  // number of items to read at once
+	maxUploadParts        = 50000 // maximum allowed number of parts/blocks in a multi-part upload
 	modTimeKey            = "mtime"
 	timeFormatIn          = time.RFC3339
 	timeFormatOut         = "2006-01-02T15:04:05.000000000Z07:00"
@@ -1689,8 +1691,17 @@ func (o *Object) Update(ctx context.Context, in io.Reader, src fs.ObjectInfo, op
 		}
 	}
 
+	uploadParts := int64(maxUploadParts)
+	if uploadParts < 1 {
+		uploadParts = 1
+	} else if uploadParts > maxUploadParts {
+		uploadParts = maxUploadParts
+	}
+	// calculate size of parts/blocks
+	partSize := chunksize.Calculator(o, int(uploadParts), o.fs.opt.ChunkSize)
+
 	putBlobOptions := azblob.UploadStreamToBlockBlobOptions{
-		BufferSize:      int(o.fs.opt.ChunkSize),
+		BufferSize:      int(partSize),
 		MaxBuffers:      o.fs.opt.UploadConcurrency,
 		Metadata:        o.meta,
 		BlobHTTPHeaders: httpHeaders,

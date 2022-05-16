@@ -454,7 +454,9 @@ func NewFs(ctx context.Context, name, root string, m configmap.Mapper) (fs.Fs, e
 	if err != nil {
 		return nil, err
 	}
-	f.srv.SetHeader("Referer", u.String())
+	if !f.findHeader(opt.Headers, "Referer") {
+		f.srv.SetHeader("Referer", u.String())
+	}
 
 	if root != "" && !rootIsDir {
 		// Check to see if the root actually an existing file
@@ -515,6 +517,17 @@ func (f *Fs) addHeaders(headers fs.CommaSepList) {
 		value := f.opt.Headers[i+1]
 		f.srv.SetHeader(key, value)
 	}
+}
+
+// Returns true if the header was configured
+func (f *Fs) findHeader(headers fs.CommaSepList, find string) bool {
+	for i := 0; i < len(headers); i += 2 {
+		key := f.opt.Headers[i]
+		if strings.EqualFold(key, find) {
+			return true
+		}
+	}
+	return false
 }
 
 // fetch the bearer token and set it if successful
@@ -1148,7 +1161,7 @@ func (f *Fs) About(ctx context.Context) (*fs.Usage, error) {
 		return f.shouldRetry(ctx, resp, err)
 	})
 	if err != nil {
-		return nil, fmt.Errorf("about call failed: %w", err)
+		return nil, err
 	}
 	usage := &fs.Usage{}
 	if i, err := strconv.ParseInt(q.Used, 10, 64); err == nil && i >= 0 {

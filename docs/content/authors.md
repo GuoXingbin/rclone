@@ -581,3 +581,15 @@ put them back in again.` >}}
   * KARBOWSKI Piotr <piotr.karbowski@gmail.com>
   * GH <geeklihui@foxmail.com>
   * rafma0 <int.main@gmail.com>
+  * Adrien Rey-Jarthon <jobs@adrienjarthon.com>
+  * Nick Gooding <73336146+nickgooding@users.noreply.github.com>
+  * Leroy van Logchem <lr.vanlogchem@gmail.com>
+  * Zsolt Ero <zsolt.ero@gmail.com>
+  * Lesmiscore <nao20010128@gmail.com>
+  * ehsantdy <ehsan.tadayon@arvancloud.com>
+  * SwazRGB <65694696+swazrgb@users.noreply.github.com>
+  * Mateusz Puczyński <mati6095@gmail.com>
+  * Michael C Tiernan - MIT-Research Computing Project <mtiernan@mit.edu>
+  * Kaspian <34658474+KaspianDev@users.noreply.github.com>
+  * Werner <EvilOlaf@users.noreply.github.com>
+  * Hugal31 <hugo.laloge@gmail.com>

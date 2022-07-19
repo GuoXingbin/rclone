@@ -106,7 +106,7 @@ Optional Flags:
 
 Arbitrary rclone flags may be specified on the
 [bisync command line](/commands/rclone_bisync/), for example
-`rclone bsync ./testdir/path1/ gdrive:testdir/path2/ --drive-skip-gdocs -v -v --timeout 10s`
+`rclone bisync ./testdir/path1/ gdrive:testdir/path2/ --drive-skip-gdocs -v -v --timeout 10s`
 Note that interactions of various rclone flags with bisync process flow
 has not been fully tested yet.
 
@@ -363,6 +363,7 @@ Bisync is considered _BETA_ and has been tested with the following backends:
 - OneDrive
 - S3
 - SFTP
+- Yandex Disk
 
 It has not been fully tested with other services yet.
 If it works, or sorta works, please let us know and we'll update the list.
